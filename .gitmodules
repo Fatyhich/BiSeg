@@ -1,0 +1,12 @@
+[submodule "segment-anything"]
+	path = segment-anything
+	url = https://github.com/facebookresearch/segment-anything.git
+[submodule "PlainSeg"]
+	path = PlainSeg
+	url = https://github.com/ydhongHIT/PlainSeg.git
+[submodule "segmentation_models.pytorch"]
+	path = segmentation_models.pytorch
+	url = https://github.com/qubvel-org/segmentation_models.pytorch.git
+[submodule "VLTSeg"]
+	path = VLTSeg
+	url = https://github.com/VLTSeg/VLTSeg.git
