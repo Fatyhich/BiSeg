@@ -1,35 +1,52 @@
 FROM ubuntu:22.04
 
-# Set noninteractive installation
-ENV DEBIAN_FRONTEND=noninteractive
+# Add metadata
+LABEL maintainer="Fatykhoph Denis"
+LABEL description="Development environment with Python and ML libraries for Segmentation"
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    python3.12 \
-    python3-pip \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+ARG UID
+ARG GID
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHON_VERSION=3.10
+
+# Create user and install dependencies in one layer
+RUN addgroup --gid ${GID} --system oversir \
+    && adduser --uid ${UID} --system \
+               --ingroup oversir \
+               --home /home/oversir \
+               --shell /bin/bash oversir \
+    && chown -R oversir:oversir /home/oversir \
+    && apt-get update \
+    && apt-get install -y \
+        python${PYTHON_VERSION} \
+        python3-pip \
+        git \
+    && rm -rf /var/lib/apt/lists/* \
+    && usermod -aG sudo oversir \
+    && echo 'oversir ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Set working directory
 WORKDIR /app
 
 # Install Python packages
 RUN pip3 install --no-cache-dir \
-    torch==2.4.0 \
-    torchvision==0.19.0 \
-    numpy==2.1.0 \
-    opencv-python-headless==4.10.0.84 \
-    matplotlib==3.9.2 \
+    torch==2.0.1 \
+    torchvision==0.15.2 \
+    numpy==1.24.3 \
+    opencv-python-headless==4.8.0.74 \
+    matplotlib==3.7.1 \
     segment-anything==1.0 \
-    albumentations==1.4.24 \
-    pillow==10.4.0 \
-    scipy==1.14.1 \
-    scikit-learn==1.6.0 \
-    pandas==2.2.3 \
-    tqdm==4.66.5
+    albumentations==1.3.1 \
+    pillow==9.5.0 \
+    scipy==1.10.1 \
+    scikit-learn==1.2.2 \
+    pandas==2.0.2 \
+    tqdm==4.65.0
 
-# Set Python path
-ENV PYTHONPATH=/app
+USER oversir
+WORKDIR /home/oversir
 
 # Set default command
-CMD ["bash"] 
+CMD ["/bin/bash"] 

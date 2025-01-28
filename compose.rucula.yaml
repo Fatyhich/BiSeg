@@ -1,0 +1,38 @@
+x-common-settings: &common-settings
+  user: 1022:1022
+  image: biseg
+  stdin_open: true
+  tty: true
+  shm_size: 24gb
+  hostname: rucula
+
+services:
+  develop:
+    <<: *common-settings
+    build:
+      context: .
+      args:
+        UID: 1022
+        GID: 1022
+    volumes:
+      - ./LeLaN:/home/oversir/dev
+      - /mnt/vol0/datasets/traverse:/mnt/datasets
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]
+
+  deploy:
+    <<: *common-settings
+    volumes:
+      - /mnt/vol0/datasets/traverse:/mnt/datasets
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['1']
+              capabilities: [gpu]

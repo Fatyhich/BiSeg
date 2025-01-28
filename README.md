@@ -27,8 +27,12 @@ segmentation/
 ## Getting Started
 
 1. Clone the repository
-2. Install dependencies (specific requirements for each model can be found in their respective directories)
-3. Follow individual model documentation for training and inference
+2. Before running the docker compose, you need to check your GID/UID and set it in the Dockerfile
+3. Using command: 
+```bash
+docker compose -f 'compose.rucula.yaml' up -d --build develop
+```
+you can run the docker container.
 
 ## Models
 
