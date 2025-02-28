@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM nvidia/cuda:12.2.2-devel-ubuntu22.04
 
 # Add metadata
 LABEL maintainer="Fatykhoph Denis"
@@ -21,8 +21,9 @@ RUN addgroup --gid ${GID} --system oversir \
     && apt-get update \
     && apt-get install -y \
         python${PYTHON_VERSION} \
+        python3-dev \
         python3-pip \
-        git \
+        build-essential libc6-dev \
     && rm -rf /var/lib/apt/lists/* \
     && usermod -aG sudo oversir \
     && echo 'oversir ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
@@ -44,6 +45,16 @@ RUN pip3 install --no-cache-dir \
     scikit-learn==1.2.2 \
     pandas==2.0.2 \
     tqdm==4.65.0
+
+RUN pip3 install --no-cache-dir \
+    torch==2.6.0 \
+    Pillow==11.1.0 \
+    transformers==4.48.3 \
+    torchvision==0.21.0 \
+    bitsandbytes==0.45.2 \
+    einops==0.8.1 \
+    # xformers==0.029 \
+    accelerate==1.3.0
 
 USER oversir
 WORKDIR /home/oversir
